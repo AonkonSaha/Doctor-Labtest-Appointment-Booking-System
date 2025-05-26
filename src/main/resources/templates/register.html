@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+        }
+
+        .register-wrapper {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 40px 16px;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+        }
+
+        .register-container {
+            background: #ffffff;
+            padding: 48px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto 20px auto;
+            width: 80px; /* Slightly bigger size for better visibility */
+            height: 80px;
+            border-radius: 50%; /* Makes the logo circular */
+            object-fit: cover; /* Ensures the image fills the container while maintaining its aspect ratio */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* Adds a soft shadow to make it stand out */
+        }
+
+        .register-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .register-subtext {
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d0d0d0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .btn-register {
+            width: 100%;
+            background-color: #3b49df;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-register:hover {
+            background-color: #2f3ecf;
+        }
+
+        .login-redirect {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 24px;
+        }
+
+        .login-redirect a {
+            color: #3b49df;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-redirect a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script src="/js/auth.js"></script>
+</head>
+<body>
+
+<div class="register-wrapper">
+    <div class="register-container">
+        <img src="/images/logo.jpg" alt="Logo" class="logo" width="60" height="60" />
+        <div class="register-title">Create Your Account</div>
+        <div class="register-subtext">Fill in the details to get started</div>
+
+        <form onsubmit="event.preventDefault(); register();">
+            <div class="form-group">
+                <label for="fullName">Full Name*</label>
+                <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required />
+            </div>
+
+            <div class="form-group">
+                <label for="username">Mobile Number*</label>
+                <input type="text" id="username" name="username" placeholder="Enter your mobile number" required />
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email (optional)</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" />
+            </div>
+
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender">
+                    <option value="">Select gender</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                    <option value="OTHER">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" name="dob" />
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password*</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required />
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password*</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter your password" required />
+            </div>
+
+            <button type="submit" class="btn-register">Register</button>
+        </form>
+
+        <div class="login-redirect">
+            Already have an account? <a th:href="@{/login}" id="loginLink">Sign in</a>
+        </div>
+    </div>
+</div>
+<script>
+    let formChanged = false;
+
+    const formElements = document.querySelectorAll("input, select");
+
+    formElements.forEach(element => {
+        element.addEventListener("input", () => {
+            formChanged = true;
+        });
+    });
+
+    document.getElementById("loginLink").addEventListener("click", function(event) {
+        if (formChanged) {
+            const confirmLeave = confirm("You have unsaved changes. Are you sure you want to leave and go to the login page?");
+            if (!confirmLeave) {
+                event.preventDefault();
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
