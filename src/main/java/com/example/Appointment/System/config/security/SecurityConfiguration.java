@@ -1,6 +1,7 @@
 package com.example.Appointment.System.config.security;
 
 
+import com.example.Appointment.System.constant.ApiPaths;
 import com.example.Appointment.System.jwt.filter.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,61 +16,63 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+
 public class SecurityConfiguration {
     @Autowired
     JwtAuthFilter jwtAuthFilter;
     public static final String[] ADMIN_URLS = {
-            "/api/user/role/**",
-            "/api/doctor/register",
-            "/api/doctor/update/**",
-            "/api/doctor/delete/**",
-            "/api/diagnostic/center/register",
-            "/api/diagnostic/center/delete/**",
-            "/api/diagnostic/center/update/**",
-            "/api/lab/test/register",
-            "/api/lab/test/delete/**",
-            "/api/lab/test/update/**",
-            "/api/time/slot/register",
-            "/api/time/slot/update/**",
+            ApiPaths.UserRole.ROOT + "/**",
+            ApiPaths.Doctor.REGISTER,
+            ApiPaths.Doctor.UPDATE,
+            ApiPaths.Doctor.DELETE,
+            ApiPaths.DiagnosticCenter.REGISTER,
+            ApiPaths.DiagnosticCenter.DELETE,
+            ApiPaths.DiagnosticCenter.UPDATE,
+            ApiPaths.LabTest.REGISTER,
+            ApiPaths.LabTest.DELETE,
+            ApiPaths.LabTest.UPDATE,
+            ApiPaths.TimeSlot.REGISTER,
+            ApiPaths.TimeSlot.UPDATE,
     };
     public static final String[] PATIENT_URLS = {
-            "/api/patient/**",
-            "/api/doctor/booking/**",
-            "/api/booking/lab/test/**",
-            "/api/doctor/fetch/**",
-            "/api/diagnostic/center/fetch/**",
-            "/home",
-            "/signout",
-            "/update/profile",
-            "/fetch/user",
-            "/user/change-password"
-
+            ApiPaths.DoctorBooking.ROOT + "/**",
+            ApiPaths.LabTestBooking.ROOT + "/**",
+            ApiPaths.Doctor.FETCH_ALL,
+            ApiPaths.LabTest.FETCH_ALL,
+            ApiPaths.DiagnosticCenter.FETCH_ALL,
+            ApiPaths.TimeSlot.FETCH,
+            ApiPaths.UserAuth.HOME,
+            ApiPaths.UserAuth.FETCH_USER,
+            ApiPaths.UserAuth.LOGOUT,
+            ApiPaths.UserAuth.UPDATE_PROFILE,
+            ApiPaths.UserAuth.UPDATE_PASSWORD
     };
     public static final String[] DOCTOR_URLS = {
 //            "/api/doctor/**",
     };
 
-    public static final String[] PUBLIC_URLS = {
-            "/swagger-ui/**",
-            "/v3/api-docs/**",
-            "/swagger-ui.html",
-            "/login",
-            "/register",
-            "/",
-            "/js/**",
-            "/css/**",
-            "/images/**",
-            "/favicon.ico",
+    public static final String[] STATIC_RESOURCES = {
+            "/css/**", "/js/**", "/images/**", "/favicon.ico","/images/patient/**"
+    };
+
+    public static final String[] HTML_PAGES = {
             "/home.html",
             "/login.html",
             "/register.html",
             "/profile.html",
             "/doctor/appointment.html",
             "/lab/test.html",
-            "/history/history.html",
-            "/api/time/slot/fetch/**",
-            "/api/lab/test/fetch/all",
-            "/delete/{id}"
+            "/history/history.html"
+    };
+
+    public static final String[] PUBLIC_URLS = {
+            "/",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-ui.html",
+            "/login",
+            "/register",
+
     };
 
     @Bean
@@ -82,6 +85,8 @@ public class SecurityConfiguration {
                         .requestMatchers(PATIENT_URLS).hasAnyRole("PATIENT","ADMIN")
                         .requestMatchers(ADMIN_URLS).hasAnyRole("ADMIN")
                         .requestMatchers(DOCTOR_URLS).hasAnyRole("DOCTOR","ADMIN")
+                        .requestMatchers(STATIC_RESOURCES).permitAll()
+                        .requestMatchers(HTML_PAGES).permitAll()
                         .requestMatchers(PUBLIC_URLS).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

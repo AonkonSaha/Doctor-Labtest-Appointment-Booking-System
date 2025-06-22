@@ -58,7 +58,7 @@ public class DoctorMapper {
                 .licenseNumber(doctorProfile.getLicenseNumber())
                 .hospitalOrClinicName(doctorProfile.getHospitalOrClinicName())
                 .availabilityStatus(doctorProfile.getAvailabilityStatus())
-                .degreesString(doctorProfile.getDegrees().toString())
+                .degreesString(doctorProfile.getDegrees()==null?"Degree Empty":doctorProfile.getDegrees().toString())
                 .doctorName(doctorProfile.getUser().getName())
                 .email(doctorProfile.getUser().getEmail())
                 .contactNumber(doctorProfile.getUser().getContact())

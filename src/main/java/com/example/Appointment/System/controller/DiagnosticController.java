@@ -1,21 +1,23 @@
 package com.example.Appointment.System.controller;
 
 import com.example.Appointment.System.exception.DiagnosticCenterNotFoundException;
+import com.example.Appointment.System.exception.InvalidDiagnosticCenterArgumentException;
 import com.example.Appointment.System.model.dto.DiagnosticDTO;
 import com.example.Appointment.System.model.mapper.DiagnosticMapper;
 import com.example.Appointment.System.service.DiagnosticCenterService;
 import com.example.Appointment.System.service.DiagnosticCenterValidationService;
-import com.example.Appointment.System.service.Imp.DiagnosticCenterServiceImp;
 import com.example.Appointment.System.service.ValidationService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.List;
 import java.util.Map;
 
+import static com.example.Appointment.System.constant.ApiPaths.DiagnosticCenter;
+
 @RestController
-@RequestMapping("/api/diagnostic/center")
+@RequestMapping(DiagnosticCenter.ROOT)
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
 public class DiagnosticController {
@@ -24,50 +26,50 @@ public class DiagnosticController {
     private final DiagnosticCenterValidationService diagnosticCenterValidationService;
     private final ValidationService validationService;
 
-    @GetMapping("/test")
-    public ResponseEntity<String> test(){
-        return ResponseEntity.ok("End Point Test");
-    }
-    @PostMapping("/register")
-    public ResponseEntity<?> registerDiagnostic(DiagnosticDTO diagnosticDTO){
-     if (!validationService.validateDiagnosisCenterDetails(diagnosticDTO).isEmpty()) {
-         return ResponseEntity.badRequest().body(validationService.validateDiagnosisCenterDetails(diagnosticDTO));
-     }
+    @PostMapping(DiagnosticCenter.REGISTER)
+    public ResponseEntity<DiagnosticDTO> registerDiagnostic(@RequestBody DiagnosticDTO diagnosticDTO){
+        if (!validationService.validateDiagnosisCenterDetails(diagnosticDTO).isEmpty()) {
+            throw new InvalidDiagnosticCenterArgumentException(validationService.validateDiagnosisCenterDetails(diagnosticDTO));
+        }
         return ResponseEntity.ok(
                 diagnosticMapper.toDiagnosticDTO(diagnosticCenterService.saveDiagnosticCenter(
                         diagnosticMapper.toDiagnosticCenter(diagnosticDTO)
                 )));
     }
-    @GetMapping("/fetch/{id}")
-    public ResponseEntity<?> fetchDiagnosticCenterById(@PathVariable Long id) throws DiagnosticCenterNotFoundException {
+
+    @GetMapping(DiagnosticCenter.FETCH_BY_ID)
+    public ResponseEntity<DiagnosticDTO> fetchDiagnosticCenterById(@PathVariable Long id)  {
         if(!diagnosticCenterValidationService.isExitDianosticCenterById(id)){
-            return ResponseEntity.badRequest().body("DiagnosticCenter doesn't exit");
+            throw new DiagnosticCenterNotFoundException("DiagnosticCenter doesn't exit");
         }
         return ResponseEntity.ok(
                 diagnosticMapper.toDiagnosticDTO(diagnosticCenterService.getDiagnosticCenterById(id))
         );
     }
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity<String> deleteDiagnosticCenterById(@PathVariable Long id) throws DiagnosticCenterNotFoundException {
+
+    @DeleteMapping(DiagnosticCenter.DELETE)
+    public ResponseEntity<String> deleteDiagnosticCenterById(@PathVariable Long id) {
         if(!diagnosticCenterValidationService.isExitDianosticCenterById(id)){
-            return ResponseEntity.badRequest().body("DiagnosticCenter doesn't exit");
+            throw new DiagnosticCenterNotFoundException("DiagnosticCenter doesn't exit");
         }
         diagnosticCenterService.removeDiagnosticCenter(id);
         return ResponseEntity.ok("DiagnosticCenter deleted successfully");
     }
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateDiagnosticCenterById(@PathVariable Long id,@RequestBody DiagnosticDTO diagnosticDTO) throws DiagnosticCenterNotFoundException {
+
+    @PutMapping(DiagnosticCenter.UPDATE)
+    public ResponseEntity<DiagnosticDTO> updateDiagnosticCenterById(@PathVariable Long id,@RequestBody DiagnosticDTO diagnosticDTO) {
         if(!diagnosticCenterValidationService.isExitDianosticCenterById(id)){
-            return ResponseEntity.badRequest().body("DiagnosticCenter doesn't exit");
+            throw new DiagnosticCenterNotFoundException("DiagnosticCenter doesn't exit");
         }
         return ResponseEntity.ok(
                 diagnosticMapper.toDiagnosticDTO(diagnosticCenterService.updateDiagnosticCenter(id,diagnosticDTO))
         );
     }
-    @GetMapping("/fetch/all")
-    public ResponseEntity<?> fetchAllDiagnosticCenter() throws DiagnosticCenterNotFoundException {
+
+    @GetMapping(DiagnosticCenter.FETCH_ALL)
+    public ResponseEntity<Map<String,List<DiagnosticDTO>>> fetchAllDiagnosticCenter() {
         if(diagnosticCenterService.getAllDiagnosticCenter().isEmpty()){
-            return ResponseEntity.badRequest().body("Diagnostic Center doesn't exit");
+            throw new DiagnosticCenterNotFoundException("DiagnosticCenter doesn't exit");
         }
         return ResponseEntity.ok(
                 Map.of("clinics",diagnosticMapper.toDiagnosticDTOS(diagnosticCenterService.getAllDiagnosticCenter())));
