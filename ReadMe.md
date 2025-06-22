@@ -60,7 +60,7 @@ This project follows **Domain-Driven Design (DDD)**, **Don't-Repeat YOurself (DR
 | Frontend          | Thymeleaf, HTML, CSS, JavaScript  |
 | Database          | MySQL                             |
 | Authentication    | JWT (JSON Web Tokens)             |
-| Architecture      | Domain-Driven Design, SOLID       |
+| Architecture      | Domain-Driven Design, SOLID , DRY |
 
 ---
 
