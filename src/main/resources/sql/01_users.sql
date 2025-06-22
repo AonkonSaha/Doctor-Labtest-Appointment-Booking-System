@@ -1,4 +1,3 @@
--------------------------------Default USER----------------------------------------
 INSERT IGNORE INTO users (id, name, email, contact, password, gender, date_of_birth, is_active)
 VALUES (
            1,

@@ -1,5 +1,6 @@
 package com.example.Appointment.System.controller;
 
+import com.example.Appointment.System.constant.ApiPaths;
 import com.example.Appointment.System.exception.InvalidLoginArgumentException;
 import com.example.Appointment.System.exception.InvalidUserArgumentException;
 import com.example.Appointment.System.exception.LogoutArgumentException;
@@ -21,8 +22,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Map;
-import static com.example.Appointment.System.constant.ApiPaths.UserAuth;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,10 +39,10 @@ public class UserAuthController {
         if(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
             return "redirect:/home.html";
         }
-        return "redirect:" + UserAuth.LOGIN;
+        return "redirect:" + ApiPaths.UserAuth.LOGIN;
     }
 
-    @GetMapping(UserAuth.HOME)
+    @GetMapping(ApiPaths.UserAuth.HOME)
     @ResponseBody
     public ResponseEntity<UserDTO> getHome(){
         System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -49,7 +50,7 @@ public class UserAuthController {
                 userService.findUserByContact(SecurityContextHolder.getContext().getAuthentication().getName())));
     }
 
-    @PostMapping(UserAuth.REGISTER)
+    @PostMapping(ApiPaths.UserAuth.REGISTER)
     @ResponseBody
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO){
         if(!validationService.validatePatientDetails(userDTO).isEmpty()){
@@ -60,12 +61,12 @@ public class UserAuthController {
         );
     }
 
-    @GetMapping(UserAuth.REGISTER)
+    @GetMapping(ApiPaths.UserAuth.REGISTER)
     public String registerUser(){
         return "register";
     }
 
-    @PostMapping(UserAuth.LOGIN)
+    @PostMapping(ApiPaths.UserAuth.LOGIN)
     @ResponseBody
     public ResponseEntity<Map<String,String>> loginUser(@RequestBody LoginDTO loginDTO){
         MUser user= userService.findUserByContact(loginDTO.getContact());
@@ -78,12 +79,12 @@ public class UserAuthController {
         return ResponseEntity.ok(Map.of("token", userService.authenticateUser(user, loginDTO)));
     }
 
-    @GetMapping(UserAuth.LOGIN)
+    @GetMapping(ApiPaths.UserAuth.LOGIN)
     public String loginUser(){
         return "login";
     }
 
-    @PostMapping(UserAuth.LOGOUT)
+    @PostMapping(ApiPaths.UserAuth.LOGOUT)
     @ResponseBody
     public ResponseEntity<String> logoutUser(){
         HttpServletRequest request= RequestUtils.getCurrentHttpRequest();
@@ -96,7 +97,7 @@ public class UserAuthController {
         return ResponseEntity.ok("Logout successfully");
     }
 
-    @PostMapping(UserAuth.UPDATE_PROFILE)
+    @PostMapping(ApiPaths.UserAuth.UPDATE_PROFILE)
     @ResponseBody
     public ResponseEntity<UserDTO> updateProfileWithOutPassword(
             @RequestParam String fullName,
@@ -116,7 +117,7 @@ public class UserAuthController {
                         fullName,email,dob,gender,photo)));
     }
 
-    @DeleteMapping(UserAuth.DELETE)
+    @DeleteMapping(ApiPaths.UserAuth.DELETE)
     @ResponseBody
     public ResponseEntity<String> deleteUserById(@PathVariable Long id){
         if(!userValidationService.isExitUserById(id)){
@@ -126,7 +127,7 @@ public class UserAuthController {
         return ResponseEntity.ok("Deleted successfully");
     }
 
-    @GetMapping(UserAuth.FETCH_USER)
+    @GetMapping(ApiPaths.UserAuth.FETCH_USER)
     @ResponseBody
     public ResponseEntity<UserDTO> fetchUser(){
         String contact = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -136,7 +137,7 @@ public class UserAuthController {
         return ResponseEntity.ok(userMapper.toUserDTO(userService.findUserByContact(contact)));
     }
 
-    @PostMapping(UserAuth.UPDATE_PASSWORD)
+    @PostMapping(ApiPaths.UserAuth.UPDATE_PASSWORD)
     @ResponseBody
     public ResponseEntity<String> updateUserPassword(@RequestBody PasswordDTO passwordDTO){
         String contact = SecurityContextHolder.getContext().getAuthentication().getName();

@@ -48,13 +48,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String contact = jwtUtils.extractContact(token);
         if (contact != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            System.out.println("Token: "+ token);
             UserDetails userDetails = userDetailsService.loadUserByUsername(contact);
             Optional<MUser> user = userRepo.findByContact(contact);
             if(user.isEmpty()) {
                 throw new IllegalArgumentException("User doesn't exit..");
             }
+
             if (user.get().getIsActive() && jwtUtils.validateToken(token, contact)) {
+                System.out.println("Token---------------------: "+ token);
+
                 System.out.println("Inner auth filter");
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

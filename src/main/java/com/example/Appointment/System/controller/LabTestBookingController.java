@@ -2,10 +2,8 @@ package com.example.Appointment.System.controller;
 
 import com.example.Appointment.System.constant.ApiPaths;
 import com.example.Appointment.System.exception.LabTestBookingNotFoundException;
-import com.example.Appointment.System.exception.PatientNotFoundException;
 import com.example.Appointment.System.model.dto.LabTestBookingDTO;
 import com.example.Appointment.System.model.mapper.LabTestBookingMapper;
-import com.example.Appointment.System.service.Imp.LabTestBookingServiceImp;
 import com.example.Appointment.System.service.LabTestBookingService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -15,23 +13,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.Appointment.System.constant.ApiPaths.LabTestBooking;
 
 @RestController
-@RequestMapping(LabTestBooking.ROOT)
+@RequestMapping(ApiPaths.LabTestBooking.ROOT)
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
 public class LabTestBookingController {
     private final LabTestBookingService labTestBookingService;
     private final LabTestBookingMapper labTestBookingMapper;
 
-    @PostMapping(LabTestBooking.REGISTER)
+    @PostMapping(ApiPaths.LabTestBooking.REGISTER)
     public ResponseEntity<LabTestBookingDTO> registerLabTestBooking(@RequestBody LabTestBookingDTO labTestBookingDTO){
         return ResponseEntity.ok(labTestBookingMapper.toLabTestBookingDTO(
                 labTestBookingService.saveLabTestBooking(labTestBookingMapper.toLabTestBooking(labTestBookingDTO))));
     }
 
-    @GetMapping(LabTestBooking.FETCH_BY_ID)
+    @GetMapping(ApiPaths.LabTestBooking.FETCH_BY_ID)
     public ResponseEntity<LabTestBookingDTO> fetchLabTestBookingById(@PathVariable("id") Long id){
         if(!labTestBookingService.isExitLabTestBookingById(id)){
             throw new LabTestBookingNotFoundException("LabTestBooking doesn't exit");
@@ -41,7 +38,7 @@ public class LabTestBookingController {
         );
     }
 
-    @DeleteMapping(LabTestBooking.DELETE)
+    @DeleteMapping(ApiPaths.LabTestBooking.DELETE)
     public ResponseEntity<String> deleteLabTestBookingById(@PathVariable Long id){
         if(!labTestBookingService.isExitLabTestBookingById(id)){
             throw new LabTestBookingNotFoundException("LabTestBooking doesn't exit");
@@ -50,7 +47,7 @@ public class LabTestBookingController {
         return ResponseEntity.ok("LabTestBooking deleted successfully");
     }
 
-    @PutMapping(LabTestBooking.UPDATE)
+    @PutMapping(ApiPaths.LabTestBooking.UPDATE)
     public ResponseEntity<LabTestBookingDTO> updateLabTestBookingById(@PathVariable("id") Long id,@RequestBody LabTestBookingDTO labTestBookingDTO){
         if(!labTestBookingService.isExitLabTestBookingById(id)){
             throw new LabTestBookingNotFoundException("LabTestBooking doesn't exit");
@@ -59,7 +56,7 @@ public class LabTestBookingController {
                 labTestBookingService.modifyLabTestBookingById(id,labTestBookingDTO)));
     }
 
-    @GetMapping(LabTestBooking.FETCH_ALL)
+    @GetMapping(ApiPaths.LabTestBooking.FETCH_ALL)
     public ResponseEntity<List<LabTestBookingDTO>> fetchAllLabTestBookings(){
         if(labTestBookingService.getAllLabTestBooking().isEmpty()){
             throw new LabTestBookingNotFoundException("LabTestBooking doesn't exit");
@@ -69,7 +66,7 @@ public class LabTestBookingController {
         );
     }
 
-    @GetMapping(LabTestBooking.HISTORY)
+    @GetMapping(ApiPaths.LabTestBooking.HISTORY)
     public ResponseEntity<Map<String,List<LabTestBookingDTO>>> fetchAllLabTestBookingHistoryByUser(){
         return ResponseEntity.ok(Map.of("labTestsBook",labTestBookingMapper.toLabTestBookingDTOS(
                 labTestBookingService.getAllLabTestBookHistoryByUser()

@@ -22,25 +22,25 @@ public class SecurityConfiguration {
     JwtAuthFilter jwtAuthFilter;
     public static final String[] ADMIN_URLS = {
             ApiPaths.UserRole.ROOT + "/**",
-            ApiPaths.Doctor.REGISTER,
-            ApiPaths.Doctor.UPDATE,
-            ApiPaths.Doctor.DELETE,
-            ApiPaths.DiagnosticCenter.REGISTER,
-            ApiPaths.DiagnosticCenter.DELETE,
-            ApiPaths.DiagnosticCenter.UPDATE,
-            ApiPaths.LabTest.REGISTER,
-            ApiPaths.LabTest.DELETE,
-            ApiPaths.LabTest.UPDATE,
-            ApiPaths.TimeSlot.REGISTER,
-            ApiPaths.TimeSlot.UPDATE,
+            ApiPaths.Doctor.ROOT+ApiPaths.Doctor.REGISTER,
+            ApiPaths.Doctor.ROOT+ApiPaths.Doctor.UPDATE,
+            ApiPaths.Doctor.ROOT+ApiPaths.Doctor.DELETE,
+            ApiPaths.DiagnosticCenter.ROOT+ApiPaths.DiagnosticCenter.REGISTER,
+            ApiPaths.DiagnosticCenter.ROOT+ApiPaths.DiagnosticCenter.DELETE,
+            ApiPaths.DiagnosticCenter.ROOT+ApiPaths.DiagnosticCenter.UPDATE,
+            ApiPaths.LabTest.ROOT+ApiPaths.LabTest.REGISTER,
+            ApiPaths.LabTest.ROOT+ApiPaths.LabTest.DELETE,
+            ApiPaths.LabTest.ROOT+ApiPaths.LabTest.UPDATE,
+            ApiPaths.TimeSlot.ROOT+ApiPaths.TimeSlot.REGISTER,
+            ApiPaths.TimeSlot.ROOT+ApiPaths.TimeSlot.UPDATE,
     };
     public static final String[] PATIENT_URLS = {
             ApiPaths.DoctorBooking.ROOT + "/**",
             ApiPaths.LabTestBooking.ROOT + "/**",
-            ApiPaths.Doctor.FETCH_ALL,
-            ApiPaths.LabTest.FETCH_ALL,
-            ApiPaths.DiagnosticCenter.FETCH_ALL,
-            ApiPaths.TimeSlot.FETCH,
+            ApiPaths.Doctor.ROOT+ApiPaths.Doctor.FETCH_ALL,
+            ApiPaths.LabTest.ROOT+ApiPaths.LabTest.FETCH_ALL,
+            ApiPaths.DiagnosticCenter.ROOT+ApiPaths.DiagnosticCenter.FETCH_ALL,
+            ApiPaths.TimeSlot.ROOT+ApiPaths.TimeSlot.FETCH,
             ApiPaths.UserAuth.HOME,
             ApiPaths.UserAuth.FETCH_USER,
             ApiPaths.UserAuth.LOGOUT,
@@ -52,7 +52,7 @@ public class SecurityConfiguration {
     };
 
     public static final String[] STATIC_RESOURCES = {
-            "/css/**", "/js/**", "/images/**", "/favicon.ico","/images/patient/**"
+            "/css/**", "/js/**", "/images/**", "/favicon.ico"
     };
 
     public static final String[] HTML_PAGES = {
@@ -72,7 +72,6 @@ public class SecurityConfiguration {
             "/swagger-ui.html",
             "/login",
             "/register",
-
     };
 
     @Bean

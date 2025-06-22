@@ -1,5 +1,6 @@
 package com.example.Appointment.System.controller;
 
+import com.example.Appointment.System.constant.ApiPaths;
 import com.example.Appointment.System.exception.DoctorNotFoundException;
 import com.example.Appointment.System.exception.InvalidDoctorArgumentException;
 import com.example.Appointment.System.model.dto.DoctorDTO;
@@ -13,15 +14,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.Doc;
-
-import static com.example.Appointment.System.constant.ApiPaths.Doctor;
-
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(Doctor.ROOT)
+@RequestMapping(ApiPaths.Doctor.ROOT)
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
 public class DoctorController {
@@ -31,7 +28,7 @@ public class DoctorController {
     private final UserValidationService userValidationService;
     private final ValidationService validationService;
 
-    @PostMapping(Doctor.REGISTER)
+    @PostMapping(ApiPaths.Doctor.REGISTER)
     public ResponseEntity<DoctorDTO> registerDoctor(@RequestBody DoctorDTO doctorDTO){
         if(!validationService.validateDoctorDetails(doctorDTO).isEmpty()){
             throw new InvalidDoctorArgumentException(validationService.validateDoctorDetails(doctorDTO));
@@ -39,7 +36,7 @@ public class DoctorController {
         return ResponseEntity.ok(doctorMapper.toDoctorDTO(
                 doctorService.saveDoctor(doctorMapper.toDoctor(doctorDTO))
         ));}
-    @GetMapping(Doctor.FETCH_BY_ID)
+    @GetMapping(ApiPaths.Doctor.FETCH_BY_ID)
     public ResponseEntity<DoctorDTO>fetchDoctorById(@PathVariable("id") Long id) throws DoctorNotFoundException {
         if(!userValidationService.isExitUserById(id)){
             throw new DoctorNotFoundException("Doctor doesn't exit");
@@ -47,7 +44,7 @@ public class DoctorController {
         return ResponseEntity.ok(doctorMapper.toDoctorDTO(
                 doctorService.getDoctorById(id)));
     }
-    @PutMapping(Doctor.UPDATE)
+    @PutMapping(ApiPaths.Doctor.UPDATE)
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<DoctorDTO> updateDoctorById(@PathVariable("id") Long id,@RequestBody DoctorDTO doctorDTO){
         if(!userValidationService.isExitUserById(id)){
@@ -59,7 +56,7 @@ public class DoctorController {
         return ResponseEntity.ok(doctorMapper.toDoctorDTO(
                 doctorService.updateDoctorById(id,doctorDTO)));
     }
-    @DeleteMapping(Doctor.DELETE)
+    @DeleteMapping(ApiPaths.Doctor.DELETE)
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<String> deleteDoctorById(@PathVariable("id") Long id){
         if(!userValidationService.isExitUserById(id)){
@@ -68,7 +65,7 @@ public class DoctorController {
         doctorService.deleteDoctorByDoctorId(id);
         return ResponseEntity.ok("Doctor deleted successfully");
     }
-    @GetMapping(Doctor.FETCH_ALL)
+    @GetMapping(ApiPaths.Doctor.FETCH_ALL)
     public ResponseEntity<Map<String,List<DoctorDTO>>> fetchAllDoctors(){
         System.out.println("---------------------------------AXSX-----------------");
         if(doctorService.getAllDoctor().isEmpty()){

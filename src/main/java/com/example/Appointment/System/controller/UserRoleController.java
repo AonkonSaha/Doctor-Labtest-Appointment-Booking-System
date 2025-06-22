@@ -9,23 +9,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.example.Appointment.System.constant.ApiPaths.UserRole;
 
 @RestController
-@RequestMapping(UserRole.ROOT)
+@RequestMapping(ApiPaths.UserRole.ROOT)
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
 public class UserRoleController {
     private final UserRoleService userRoleService;
     private final UserRoleMapper userRoleMapper;
 
-    @PostMapping(UserRole.SET)
+    @PostMapping(ApiPaths.UserRole.SET)
     public ResponseEntity<UserRoleDTO> setUserRole(@RequestBody UserRoleDTO userRoleDTO){
         return ResponseEntity.ok(userRoleMapper.toUserRoleDTO(userRoleService.saveUserRole(
                 userRoleMapper.toUserRole(userRoleDTO))));
     }
 
-    @PutMapping(UserRole.UPDATE)
+    @PutMapping(ApiPaths.UserRole.UPDATE)
     public ResponseEntity<UserRoleDTO> updateUserRoleById(@PathVariable("id") Long id,@RequestBody UserRoleDTO userRoleDTO){
         return ResponseEntity.ok(
                 userRoleMapper.toUserRoleDTO(userRoleService.updateRoleById(id,userRoleDTO))

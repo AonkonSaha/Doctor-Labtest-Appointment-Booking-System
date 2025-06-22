@@ -6,32 +6,31 @@ import com.example.Appointment.System.exception.DoctorNotFoundException;
 import com.example.Appointment.System.model.dto.DoctorBookingDTO;
 import com.example.Appointment.System.model.mapper.DoctorBookingMapper;
 import com.example.Appointment.System.service.DoctorBookingService;
-import com.example.Appointment.System.service.Imp.DoctorBookingServiceImp;
 import com.example.Appointment.System.service.UserValidationService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import static com.example.Appointment.System.constant.ApiPaths.DoctorBooking;
 
 @RestController
-@RequestMapping(DoctorBooking.ROOT)
+@RequestMapping(ApiPaths.DoctorBooking.ROOT)
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
 public class DoctorBookingController {
     private final DoctorBookingService doctorBookingService;
     private final DoctorBookingMapper doctorBookingMapper;
     private final UserValidationService userValidationService;
-    @PostMapping(DoctorBooking.REGISTER)
+    @PostMapping(ApiPaths.DoctorBooking.REGISTER)
     public ResponseEntity<DoctorBookingDTO> registerDoctorBooking(@RequestBody DoctorBookingDTO doctorBookingDTO){
         return ResponseEntity.ok(doctorBookingMapper.toDoctorBookingDTO(doctorBookingService.saveDoctorBooking(
                 doctorBookingMapper.toDoctorBooking(doctorBookingDTO))));
     }
-    @GetMapping(DoctorBooking.FETCH_BY_ID)
+    @GetMapping(ApiPaths.DoctorBooking.FETCH_BY_ID)
     public ResponseEntity<DoctorBookingDTO> fetchDoctorBookingById(@PathVariable("id") Long id) {
         if(!doctorBookingService.isExitDoctorBookById(id)){
             throw new DoctorBookNotFoundException("Doctor booking doesn't exit");
@@ -39,7 +38,7 @@ public class DoctorBookingController {
         return ResponseEntity.ok(doctorBookingMapper.toDoctorBookingDTO(
                 doctorBookingService.fetchDoctorBookById(id)));
     }
-    @DeleteMapping(DoctorBooking.DELETE)
+    @DeleteMapping(ApiPaths.DoctorBooking.DELETE)
     public ResponseEntity<String> deleteDoctorBookingById(@PathVariable("id") Long id)  {
         if(!doctorBookingService.isExitDoctorBookById(id)){
             throw new DoctorBookNotFoundException("DoctorBook doesn't exit");
@@ -47,7 +46,7 @@ public class DoctorBookingController {
         doctorBookingService.deleteDoctorBookById(id);
         return ResponseEntity.ok("Doctor booking deleted successfully");
     }
-    @PutMapping(DoctorBooking.UPDATE)
+    @PutMapping(ApiPaths.DoctorBooking.UPDATE)
     public ResponseEntity<DoctorBookingDTO> updateDoctorBookingById(
             @PathVariable("id") Long id,@RequestBody DoctorBookingDTO doctorBookingDTO){
         if(!doctorBookingService.isExitDoctorBookById(id)){
@@ -57,7 +56,7 @@ public class DoctorBookingController {
                 doctorBookingService.updateDoctorBooking(id,doctorBookingDTO)
         ));
     }
-    @GetMapping(DoctorBooking.FETCH_ALL)
+    @GetMapping(ApiPaths.DoctorBooking.FETCH_ALL)
     public ResponseEntity<List<DoctorBookingDTO>> fetchAllDoctorBookings(){
         if(doctorBookingService.fetchAllDoctorBooking().isEmpty()){
             throw new DoctorBookNotFoundException("DoctorBook doesn't exit");
@@ -65,7 +64,7 @@ public class DoctorBookingController {
         return ResponseEntity.ok(
                 doctorBookingMapper.toDoctorBookingDTOS(doctorBookingService.fetchAllDoctorBooking()));
     }
-    @GetMapping(DoctorBooking.TIME_SLOT)
+    @GetMapping(ApiPaths.DoctorBooking.TIME_SLOT)
     public ResponseEntity<Map<String,List<String>>> fetchTimeSlotDoctorBooking( @RequestParam Long doctorId,
                                                                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date){
         if(!userValidationService.isExitUserById(doctorId)){
@@ -76,7 +75,7 @@ public class DoctorBookingController {
         }
         return ResponseEntity.ok(Map.of("bookedSlots", doctorBookingService.getTimeSlotDoctorBooking(doctorId, date)));
     }
-    @GetMapping(DoctorBooking.HISTORY)
+    @GetMapping(ApiPaths.DoctorBooking.HISTORY)
     public ResponseEntity<Map<String,List<DoctorBookingDTO>>> fetchDoctorBookingHistoryByUser(){
         return ResponseEntity.ok(Map.of("doctorBookingHistories",doctorBookingMapper.toDoctorBookingDTOS(
                 doctorBookingService.getDoctorBookingHistory()
