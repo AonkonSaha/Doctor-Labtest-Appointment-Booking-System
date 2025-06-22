@@ -68,7 +68,7 @@ This project follows **Domain-Driven Design (DDD)**, **Don't-Repeat YOurself (DR
 
 ### ✅ Prerequisites
 - Java 21+
-- Spring Boot Version 3.4.5
+- Spring Boot Version 3.2.0
 - Gradle 8.4+
 - MySQL 8.40+
 - IDE IntelliJ 
