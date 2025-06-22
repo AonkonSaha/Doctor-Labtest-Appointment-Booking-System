@@ -31,7 +31,6 @@ A full-stack **Doctor & Lab Appointment Booking System** built with **Spring Boo
 ## 🧱 Architecture & Best Practices
 
 This project follows **Domain-Driven Design (DDD)** and adheres to **SOLID Principles** to ensure scalability, maintainability, and clean separation of concerns.
-
 ### ✅ Domain-Driven Design (DDD)
 - Separation between business logic, application flow, and infrastructure
 - Each domain entity models real-world concepts (e.g., Doctor, Appointment)
@@ -42,6 +41,8 @@ This project follows **Domain-Driven Design (DDD)** and adheres to **SOLID Princ
 - **L**iskov Substitution: Replace base classes with subclasses without issues  
 - **I**nterface Segregation: Fine-grained interfaces for clear contracts  
 - **D**ependency Inversion: Depends on abstractions, not concrete classes
+
+### ✅ Don't Repeat Yourself (DRY)
 
 ---
 
