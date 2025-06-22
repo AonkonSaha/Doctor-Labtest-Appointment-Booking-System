@@ -43,7 +43,13 @@ This project follows **Domain-Driven Design (DDD)**, **Don't-Repeat YOurself (DR
 - **D**ependency Inversion: Depends on abstractions, not concrete classes
 
 ### ✅ Don't Repeat Yourself (DRY)
-
+- Instead of duplicating time slot checks in multiple controllers or services, create a reusable TimeSlotValidator service to  validate overlapping appointments or availability
+- Use centralized mapper classes (e.g., AppointmentMapper, DoctorMapper) to convert between entities and DTOs, avoiding repeated mapping logic across controllers
+- Store all endpoint paths in a centralized ApiPaths class to prevent hardcoding URLs in multiple places
+- Handle repeated error cases (e.g., not found, invalid input) using a global @ControllerAdvice instead of repeating try-catch blocks
+- Move input validation (e.g., for doctor registration, appointment booking) into a reusable ValidationService instead of embedding it directly in controllers
+- Centralize JWT extraction and role verification logic in a utility class or filter, rather than repeating it in each secured endpoint
+- Use a standard response wrapper (e.g., ApiResponse<T>) for success/error responses across all controllers to avoid redundant formatting
 ---
 
 ## 🛠️ Tech Stack
