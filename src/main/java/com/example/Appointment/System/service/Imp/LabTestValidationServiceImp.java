@@ -11,11 +11,11 @@ public class LabTestValidationServiceImp implements LabTestValidationService {
     private final LabTestRepo labTestRepo;
     @Override
     public boolean isEmptyLabTestName(String labTestName) {
-        return labTestName.isEmpty();
+        return labTestName==null || labTestName.isEmpty();
     }
     @Override
     public boolean isEmptyLabTestDescription(String labTestDescription) {
-        return labTestDescription.isEmpty();
+        return labTestDescription==null || labTestDescription.isEmpty();
     }
     @Override
     public boolean isExitLabTestName(String labTestName) {

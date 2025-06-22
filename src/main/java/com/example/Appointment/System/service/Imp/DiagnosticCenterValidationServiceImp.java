@@ -22,41 +22,41 @@ public class DiagnosticCenterValidationServiceImp implements DiagnosticCenterVal
 
     @Override
     public boolean isEmptyCityName(String cityName) {
-        return cityName.isEmpty();
+        return cityName==null || cityName.isEmpty();
     }
 
     @Override
     public boolean isEmptyCountryName(String countryName) {
-        return countryName.isEmpty();
+        return countryName==null || countryName.isEmpty();
     }
 
     @Override
     public boolean isEmptyAddress(String address) {
-        return address.isEmpty();
+        return address==null || address.isEmpty();
     }
 
     @Override
     public boolean isEmptyRoadName(String roadName) {
-        return roadName.isEmpty();
+        return roadName==null || roadName.isEmpty();
     }
 
     @Override
     public boolean isEmptyHouseNumber(String houseNumber) {
-        return houseNumber.isEmpty();
+        return houseNumber==null || houseNumber.isEmpty();
     }
 
     @Override
     public boolean isEmptyDiagnoseCenterName(String diagnoseCenterName) {
-        return diagnoseCenterName.isEmpty() ;
+        return diagnoseCenterName==null || diagnoseCenterName.isEmpty() ;
     }
 
     @Override
     public boolean isEmptyContactNumber(String contactNumber) {
-        return contactNumber.isEmpty();
+        return contactNumber==null || contactNumber.isEmpty();
     }
 
     @Override
     public boolean isEmptyEmail(String email) {
-        return email.isEmpty() ;
+        return email==null || email.isEmpty() ;
     }
 }
