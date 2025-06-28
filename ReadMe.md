@@ -1,66 +1,116 @@
 # 🏥 Doctor & Lab Appointment Booking System
 
-A full-stack **Doctor & Lab Appointment Booking System** built with **Spring Boot**, **Thymeleaf**, **JWT**, **JavaScript**, and **MySQL**. The application enables patients to search and book appointments with doctors and labs, while administrators can manage users, appointments, and services through a secure and role-based system.
+A comprehensive full-stack **Doctor & Lab Appointment Booking System** built with **Spring Boot**, **Thymeleaf**, **JWT**, **JavaScript**, and **MySQL**. It empowers patients to securely search and book doctor or lab appointments, while administrators manage users, bookings, and system configurations via role-based access.
 
 ---
 
 ## 🚀 Key Features
 
-### 🔐 Authentication & Authorization
-- Custom login and registration flow using JWT
-- Role-based access control (Admin, Doctor, Patient)
-- Secure session management
+### 🔐 Secure Authentication & Authorization
+- JWT-based login with role-based access control: `ADMIN`, `DOCTOR`, `PATIENT`
+- Secure session and password management
+- Protected APIs with fine-grained permissions using `@SecurityRequirement`
 
-### 📅 Appointment Booking
-- Book appointments with doctors or labs via interactive modals
-- View appointment history and upcoming schedules
-- Real-time availability management
+### 📅 Smart Appointment Management
+- Book doctor or lab test appointments with interactive modals
+- View history and upcoming schedules filtered by patient
+- Built-in validation for time slot conflicts and availability
+- CRUD operations on bookings with consistent Swagger documentation
 
 ### 🧑‍⚕️ Doctor & Lab Directory
-- Search and filter doctors by specialty or location
-- Responsive doctor/lab cards with booking options
-- Admin control to create, update, and delete listings
+- Responsive card-style listings for doctors and labs
+- Filter by specialization, location, and availability
+- Admin features to manage doctor/lab listings with rich metadata
 
-### 🖥️ Responsive UI
-- Clean, modern user interface using Thymeleaf and JavaScript
-- Sidebar navigation for all user types
-- Mobile-friendly design with dynamic layout and modals
+### 🖥️ Responsive & Modern UI
+- Dynamic and user-friendly UI using **Thymeleaf** + **JavaScript**
+- Sidebar-based navigation and role-specific dashboards
+- Mobile-first layout with accessible modal booking system
 
 ---
 
 ## 🧱 Architecture & Best Practices
 
-This project follows **Domain-Driven Design (DDD)**, **Don't-Repeat YOurself (DRY)** and adheres to **SOLID Principles** to ensure scalability, maintainability, and clean separation of concerns.
+This project is designed with **clean architecture principles**, emphasizing **Domain-Driven Design (DDD)**, **SOLID**, and **DRY** to maximize scalability and code maintainability.
+
 ### ✅ Domain-Driven Design (DDD)
-- Separation between business logic, application flow, and infrastructure
-- Each domain entity models real-world concepts (e.g., Doctor, Appointment)
+- Clear domain boundaries between `Doctor`, `Lab`, `Booking`, `User`, etc.
+- Mapper classes to handle DTO↔Entity transformation
+- Centralized validation, business logic, and service abstractions
 
 ### ✅ SOLID Principles
-- **S**ingle Responsibility: Each class or component has one responsibility  
-- **O**pen/Closed: System is open for extension, closed for modification  
-- **L**iskov Substitution: Replace base classes with subclasses without issues  
-- **I**nterface Segregation: Fine-grained interfaces for clear contracts  
-- **D**ependency Inversion: Depends on abstractions, not concrete classes
+- **S**ingle Responsibility: Controllers, services, and mappers are modular  
+- **O**pen/Closed: Easily extendable through interfaces and layered design  
+- **L**iskov Substitution: Interfaces and abstract services are respected  
+- **I**nterface Segregation: DTOs and mappers are specialized  
+- **D**ependency Inversion: Layers interact via interfaces, not implementations  
 
 ### ✅ Don't Repeat Yourself (DRY)
-- Instead of duplicating time slot checks in multiple controllers or services, create a reusable TimeSlotValidator service to  validate overlapping appointments or availability
-- Use centralized mapper classes (e.g., AppointmentMapper, DoctorMapper) to convert between entities and DTOs, avoiding repeated mapping logic across controllers
-- Store all endpoint paths in a centralized ApiPaths class to prevent hardcoding URLs in multiple places
-- Handle repeated error cases (e.g., not found, invalid input) using a global @ControllerAdvice instead of repeating try-catch blocks
-- Move input validation (e.g., for doctor registration, appointment booking) into a reusable ValidationService instead of embedding it directly in controllers
-- Centralize JWT extraction and role verification logic in a utility class or filter, rather than repeating it in each secured endpoint
-- Use a standard response wrapper (e.g., ApiResponse<T>) for success/error responses across all controllers to avoid redundant formatting
+- ✅ `TimeSlotValidator`: Prevents slot conflicts via reusable service  
+- ✅ `ApiPaths`: Centralized class for all API endpoint paths  
+- ✅ `ControllerAdvice`: Global exception handling and error formatting  
+- ✅ `ValidationService`: Standard input validation for doctors/labs/appointments  
+- ✅ `Mapper Classes`: Clean DTO-Entity conversion logic (e.g., `DoctorMapper`)  
+- ✅ `@Parameter` + `@Operation`: Standardized Swagger annotations for all endpoints  
+
 ---
 
 ## 🛠️ Tech Stack
 
-| Layer             | Technology                        |
-|------------------|------------------------------------|
-| Backend           | Spring Boot, Spring Security, JWT |
-| Frontend          | Thymeleaf, HTML, CSS, JavaScript  |
-| Database          | MySQL                             |
-| Authentication    | JWT (JSON Web Tokens)             |
-| Architecture      | Domain-Driven Design, SOLID , DRY |
+| Layer        | Technology                        |
+|--------------|------------------------------------|
+| Backend      | Spring Boot 3.2.0, Spring Security |
+| Frontend     | Thymeleaf, JavaScript, CSS         |
+| Database     | MySQL 8.40+                        |
+| Auth         | JWT (Token-based authentication)   |
+| Docs         | Swagger (via Springdoc OpenAPI 3)  |
+| Build Tool   | Gradle 8.4                         |
+| Design       | DDD, SOLID, DRY                    |
+
+---
+## 🧪 Dummy Data
+
+### ✅ Login User (Dual Role - PATIENT & ADMIN)
+
+| Name         | Contact       | Password | Role(s)         |
+|--------------|---------------|----------|-----------------|
+| Aonkon Saha  | 01881264859   | 12345678 | PATIENT, ADMIN  |
+
+Password is stored as BCrypt hash: $2a$10$ulXmahQgs0lCzyjGuMOmi.vQkl9VSL1QefY8aq1OUfXANAaj4PKZe
+
+---
+
+### 👨‍⚕️ Doctors (Sample)
+
+| ID | Name              | Designation   | Contact       | Hospital               | Degrees                  | Status  |
+|----|-------------------|---------------|---------------|------------------------|--------------------------|---------|
+| 2  | Dr. Shreya Saha   | Cardiologist  | 01881264850   | City Hospital          | MBBS(RU), MD(Cardiology) | Active  |
+| 3  | Dr. Rahim Khan    | Neurologist   | 01710000000   | HealthPlus Clinic      | MBBS(DU), DM(Neurology)  | Active  |
+| 4  | Dr. Susmita Sen   | Neurologist   | 91891634896   | Hall & Smith Hospital  | MBBS(DU), MD(Cardiology) | Active  |
+| …  | …                 | …             | …             | …                      | …                        | …       |
+
+---
+### 🧪 Lab Tests
+
+| ID | Test Name                        | Description                                 |
+|----|----------------------------------|---------------------------------------------|
+| 1  | Complete Blood Count (CBC)       | Basic blood analysis                        |
+| 2  | Liver Function Test (LFT)        | Assesses liver function                     |
+| 3  | Blood Sugar (Fasting/Post)       | Glucose level check                         |
+| 4  | Kidney Function Test (KFT)       | Kidney indicators                           |
+| 5  | Urine Routine Examination (R/E)  | Full urine analysis                         |
+| …  | …                                | …                                           |
+
+---
+
+### 🏥 Diagnostic Centers
+
+| ID | Center Name           | City      | Country | Contact        | Rating |
+|----|-----------------------|-----------|---------|----------------|--------|
+| 1  | HealthFirst Diagnostics | New York  | USA     | +1-212-555-0101 | 4.5    |
+| 2  | MediCare Labs         | Los Angeles | USA    | +1-310-555-0202 | 4.2    |
+| 3  | CityLab Diagnostics   | London     | UK      | +44-20-7946-0303| 4.7    |
+| …  | …                     | …         | …       | …              | …      |
 
 ---
 
@@ -68,10 +118,38 @@ This project follows **Domain-Driven Design (DDD)**, **Don't-Repeat YOurself (DR
 
 ### ✅ Prerequisites
 - Java 21+
-- Spring Boot Version 3.2.0
 - Gradle 8.4+
 - MySQL 8.40+
-- IDE IntelliJ 
+- IDE: IntelliJ (recommended)
 
+---
+
+## 📘 Swagger API Documentation
+
+Auto-generated documentation is available via:
+
+\`\`\`
+http://localhost:8080/swagger-ui.html
+\`\`\`
+
+All endpoints include:
+- ✨ `@Operation` summaries
+- 🧾 `@ApiResponse` and `@Schema`-based response structures
+- 🔐 `@SecurityRequirement` for secured routes
+- 🧩 `@Parameter` descriptions for `@PathVariable` inputs
+
+---
+
+## 📈 Status
+
+✅ **Controller and DTO Swagger annotations complete**  
+✅ **Booking modules (doctor & lab) fully functional**  
+🛠️ **Profile editing, notifications & pagination in progress**
+
+---
+> ✅ **Note:** You can login using the following credentials:  
+> - **Mobile:** `01881264859`  
+> - **Password:** `12345678`  
+> - **Roles:** `PATIENT`, `ADMIN`
 
 
